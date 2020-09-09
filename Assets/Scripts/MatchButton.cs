@@ -150,14 +150,42 @@ namespace DefaultNamespace
             currentButtonStatusInt++;
             currentButtonStatusInt %= 4;
             CurrentButtonStatus = (ButtonStatus)currentButtonStatusInt;
+
+            switch (CurrentButtonStatus)
+            {
+                case ButtonStatus.Invisible:
+                    _currentButtonSolutionStatus = ButtonSolutionStatus.Invisible;
+                    break;
+                case ButtonStatus.Locked:
+                    _currentButtonSolutionStatus = ButtonSolutionStatus.Locked;
+                    break;
+                default:
+                    if (_currentButtonSolutionStatus == ButtonSolutionStatus.Invisible
+                        || _currentButtonSolutionStatus == ButtonSolutionStatus.Locked)
+                    {
+                        _currentButtonSolutionStatus = ButtonSolutionStatus.IsNotAnswer;
+                    }
+                    break;
+            }
+            
         }
         
         private void OnSolutionButtonPressed()
         {
-            int currentButtonSolutionStatusInt = (int) CurrentButtonSolutionStatus;
-            currentButtonSolutionStatusInt++;
-            currentButtonSolutionStatusInt %= 4;
-            CurrentButtonSolutionStatus = (ButtonSolutionStatus)currentButtonSolutionStatusInt;
+            if (CurrentButtonStatus == ButtonStatus.Invisible 
+                || CurrentButtonStatus == ButtonStatus.Locked)
+            {
+                return;
+            }
+
+            if (CurrentButtonSolutionStatus == ButtonSolutionStatus.IsAnswer)
+            {
+                CurrentButtonSolutionStatus = ButtonSolutionStatus.IsNotAnswer;
+            }
+            else
+            {
+                CurrentButtonSolutionStatus = ButtonSolutionStatus.IsAnswer;
+            }
         }
 
         public MatchButtonData GetData()
