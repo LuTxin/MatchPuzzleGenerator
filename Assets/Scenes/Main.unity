@@ -2365,7 +2365,7 @@ MonoBehaviour:
   _generateFrameButton: {fileID: 1310268312}
   _toggleAnswerButton: {fileID: 1207613555}
   _matchPanel: {fileID: 1317899095}
-  _exportJsonButton: {fileID: 0}
+  _exportJsonButton: {fileID: 1060009703}
   _matchObject: {fileID: 1364701348}
 --- !u!1 &1637726319
 GameObject:
