@@ -8,6 +8,6 @@ namespace DefaultNamespace
         void GenerateFrame(int row, int column, RectTransform panel, GameObject match);
         void CleanFrame();
         void ToggleSetAnswerMode();
-        List<MatchButtonData> GetMatchButtonJson();
+        List<MatchButtonData> GetMatchButtonList();
     }
 }

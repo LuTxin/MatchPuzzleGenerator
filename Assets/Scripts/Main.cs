@@ -104,7 +104,7 @@ public class Main : MonoBehaviour
         if (_frameGenerater != null)
         {
             MatchQuizData quizData = new MatchQuizData();
-            quizData._matchesInfo = _frameGenerater.GetMatchButtonJson();
+            quizData._matchesInfo = _frameGenerater.GetMatchButtonList();
             quizData._column = _column;
             quizData._row = _row;
             quizData._type = _gameType;

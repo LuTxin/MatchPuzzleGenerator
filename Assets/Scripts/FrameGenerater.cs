@@ -165,7 +165,7 @@ namespace DefaultNamespace
             }
         }
 
-        public List<MatchButtonData> GetMatchButtonJson()
+        public List<MatchButtonData> GetMatchButtonList()
         {
             List<MatchButtonData> matchButtonDatas = new List<MatchButtonData>();
             
