@@ -32,6 +32,11 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+        List<string> options = new List<string>();
+        options.Add(MatchGeneraterConstants.Square);
+        options.Add(MatchGeneraterConstants.Hourglass);
+        options.Add(MatchGeneraterConstants.Barrel);
+        _typeDropDown.AddOptions(options);
         _generateFrameButton.onClick.AddListener(OnGenerateFrameButtonClicked);
         _toggleAnswerButton.onClick.AddListener(ToggleAnswer);
         _exportJsonButton.onClick.AddListener(ExportJson);
