@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
 
 public class Main : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class Main : MonoBehaviour
     [SerializeField] private Button _toggleAnswerButton;
     [SerializeField] private RectTransform _matchPanel;
     [SerializeField] private Button _exportJsonButton;
+    [SerializeField] private Text _statusLabel;
     
     [SerializeField] private GameObject _matchObject;
     // Start is called before the first frame update
@@ -78,6 +80,8 @@ public class Main : MonoBehaviour
             _frameGenerater.CleanFrame();
         }
 
+        _statusLabel.text = "Edit Initial Status";
+        
         switch (_gameType)
         {
             case _squareType:
@@ -85,6 +89,8 @@ public class Main : MonoBehaviour
                 _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject);
                 break;
             case _triangleHourglassType:
+                _frameGenerater = new TriangleHourGlassFrameGenerater();
+                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject);
                 break;
             case _triangleBarrelType:
                 break;
@@ -96,6 +102,14 @@ public class Main : MonoBehaviour
         if (_frameGenerater != null)
         {
             _frameGenerater.ToggleSetAnswerMode();
+            if (_frameGenerater.IsAnswerMode())
+            {
+                _statusLabel.text = "Edit Final Status";
+            }
+            else
+            {
+                _statusLabel.text = "Edit Initial Status";
+            }
         }
     }
 
@@ -119,7 +133,8 @@ public class Main : MonoBehaviour
             StreamWriter streamWriter = new StreamWriter("/Users/lu.zhang/MatchGenerater/QuizData/untitled");
             streamWriter.Write(stringWriter.ToString());
             streamWriter.Flush();
-            Debug.LogError("luzhang2 :" + streamWriter.ToString());
+            
+            _statusLabel.text = "Json generated";
         }
     }
 }

@@ -9,5 +9,6 @@ namespace DefaultNamespace
         void CleanFrame();
         void ToggleSetAnswerMode();
         List<MatchButtonData> GetMatchButtonList();
+        bool IsAnswerMode();
     }
 }

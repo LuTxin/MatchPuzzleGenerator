@@ -11,10 +11,14 @@ namespace DefaultNamespace
     {
         private List<List<MatchButton>> _horizontalMatchButtons;
         private List<List<MatchButton>> _verticalMatchButtons;
-        private IFrameGenerater _frameGeneraterImplementation;
         private RectTransform _panel;
         private bool _isAnswerMode;
-        
+
+        public bool IsAnswerMode()
+        {
+            return _isAnswerMode;
+        }
+
         public void GenerateFrame(int row, int column, RectTransform panel, GameObject match)
         {
             _isAnswerMode = false;
