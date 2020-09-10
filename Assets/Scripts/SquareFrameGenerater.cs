@@ -19,7 +19,7 @@ namespace DefaultNamespace
             return _isAnswerMode;
         }
 
-        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match)
+        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match, string direction)
         {
             _isAnswerMode = false;
             _panel = panel;

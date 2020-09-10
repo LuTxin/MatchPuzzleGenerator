@@ -16,9 +16,21 @@ namespace DefaultNamespace
 
         private int _row;
         private int _column;
+
+        private string _direction;
+        private int toggleFactor = 1;
         
-        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match)
+        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match, string direction)
         {
+            if (direction == MatchGeneraterConstants.Hourglass)
+            {
+                toggleFactor = 0;
+            }
+            else if (direction == MatchGeneraterConstants.Barrel)
+            {
+                toggleFactor = 1;
+            }
+            
             _panel = panel;
             _row = row;
             _column = column;
@@ -40,7 +52,7 @@ namespace DefaultNamespace
             int horizontalMatchRows = 1 + row;
             for (int i = 0; i < horizontalMatchRows; i++)
             {
-                if (i % 2 == 0)
+                if (i % 2 == toggleFactor)
                 {
                     currentColumn = (int)Math.Ceiling((float)column/2f);
                     xOffset = 0;
@@ -73,7 +85,7 @@ namespace DefaultNamespace
             _backslashMatchButtons = new List<MatchButton>();
             for (int i = 0; i < row; i++)
             {
-                if (i % 2 == 0)
+                if (i % 2 == toggleFactor)
                 {
                     xOffset = 0;
                     currentColumn = 1 + column/2;
@@ -105,7 +117,7 @@ namespace DefaultNamespace
             _slashMatchButtons = new List<MatchButton>();
             for (int i = 0; i < row; i++)
             {
-                if (i % 2 == 0)
+                if (i % 2 == toggleFactor)
                 {
                     xOffset = matchHeight/2f;
                     currentColumn = 1 + (column - 1)/2;

@@ -24,10 +24,6 @@ public class Main : MonoBehaviour
     [SerializeField] private GameObject _matchObject;
     // Start is called before the first frame update
 
-    private const string _squareType = "Square";
-    private const string _triangleHourglassType = "Triangle_hourglass";
-    private const string _triangleBarrelType = "Triangle_barrel";
-    
     private string _gameType;
     private int _row;
     private int _column;
@@ -84,15 +80,17 @@ public class Main : MonoBehaviour
         
         switch (_gameType)
         {
-            case _squareType:
+            case MatchGeneraterConstants.Square:
                 _frameGenerater = new SquareFrameGenerater();
-                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject);
+                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Square);
                 break;
-            case _triangleHourglassType:
+            case MatchGeneraterConstants.Hourglass:
                 _frameGenerater = new TriangleHourGlassFrameGenerater();
-                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject);
+                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Hourglass);
                 break;
-            case _triangleBarrelType:
+            case MatchGeneraterConstants.Barrel:
+                _frameGenerater = new TriangleHourGlassFrameGenerater();
+                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Barrel);
                 break;
         }
     }
