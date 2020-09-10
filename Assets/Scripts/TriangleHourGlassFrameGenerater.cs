@@ -77,6 +77,9 @@ namespace DefaultNamespace
                     newMatchRect.anchoredPosition = new Vector2(horizontalX + xOffset - globalOffsetDeltaX/2f, -horizontalY + globalOffsetDeltaY/2f);
                     newMatch.SetActive(true);
                     _horizontalMatchButtons.Add(matchButton);
+                    matchButton._column = j;
+                    matchButton._row = i;
+                    
                 }
             }
             
@@ -109,6 +112,8 @@ namespace DefaultNamespace
                     newMatchRect.anchoredPosition = new Vector2(horizontalX + xOffset - globalOffsetDeltaX/2f, -horizontalY + globalOffsetDeltaY/2f);
                     newMatch.SetActive(true);
                     _backslashMatchButtons.Add(matchButton);
+                    matchButton._column = j;
+                    matchButton._row = i;
                 }
             }
             
@@ -141,6 +146,8 @@ namespace DefaultNamespace
                     newMatchRect.anchoredPosition = new Vector2(horizontalX + xOffset - globalOffsetDeltaX/2f, -horizontalY + globalOffsetDeltaY/2f);
                     newMatch.SetActive(true);
                     _slashMatchButtons.Add(matchButton);
+                    matchButton._column = j;
+                    matchButton._row = i;
                 }
             }
         }
