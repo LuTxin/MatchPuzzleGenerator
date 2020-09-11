@@ -14,6 +14,7 @@ public class Main : MonoBehaviour
     [SerializeField] private InputField _rowInputField;
     [SerializeField] private InputField _columnInputField;
     [SerializeField] private InputField _matchNumInputField;
+    [SerializeField] private InputField _handCapabilityInputField;
     [SerializeField] private Dropdown _typeDropDown;
     [SerializeField] private Button _generateFrameButton;
     [SerializeField] private Button _toggleAnswerButton;
@@ -28,6 +29,7 @@ public class Main : MonoBehaviour
     private int _row;
     private int _column;
     private int _matchNum;
+    private int _handCapability;
     private IFrameGenerater _frameGenerater;
 
     private void Start()
@@ -65,12 +67,18 @@ public class Main : MonoBehaviour
 
         _gameType = _typeDropDown.options[_typeDropDown.value].text;
 
-        _matchNum = 1;
+        _matchNum = 0;
         if(!int.TryParse(_matchNumInputField.text, out _matchNum))
         {
-            Debug.LogErrorFormat("column invalid. Using {0} instead", _matchNum);
+            Debug.LogErrorFormat("_matchNum invalid. Using {0} instead", _matchNum);
         }
 
+        _handCapability = 0;
+        if(!int.TryParse(_handCapabilityInputField.text, out _handCapability))
+        {
+            Debug.LogErrorFormat("_handCapability invalid. Using {0} instead", _handCapability);
+        }
+        
         GenerateFrame();
     }
 

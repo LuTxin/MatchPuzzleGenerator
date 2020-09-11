@@ -63,12 +63,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\FrameGenerater.cs" />
     <Compile Include="Assets\Scripts\IFrameGenerater.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
     <Compile Include="Assets\Scripts\MatchButton.cs" />
     <Compile Include="Assets\Scripts\MatchButtonData.cs" />
+    <Compile Include="Assets\Scripts\MatchGeneraterConstants.cs" />
     <Compile Include="Assets\Scripts\MatchQuizData.cs" />
+    <Compile Include="Assets\Scripts\SquareFrameGenerater.cs" />
+    <Compile Include="Assets\Scripts\TriangleHourGlassFrameGenerater.cs" />
     <None Include="Assets\Library\Newtonsoft.Json.Standalone.Unity\link.xml" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/Users/lu.zhang/MatchPuzzleGenerator/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
