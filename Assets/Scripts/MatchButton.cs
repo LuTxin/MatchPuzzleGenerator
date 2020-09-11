@@ -191,11 +191,11 @@ namespace DefaultNamespace
         public MatchButtonData GetData()
         {
             MatchButtonData matchButtonData = new MatchButtonData();
-            matchButtonData._rotation = (int)transform.rotation.eulerAngles.z;
-            matchButtonData._column = _column;
-            matchButtonData._row = _row;
-            matchButtonData._initialStatus = _currentButtonStatus.ToString();
-            matchButtonData._finalStatus = _currentButtonSolutionStatus.ToString();
+            matchButtonData.Rotation = (int)transform.rotation.eulerAngles.z;
+            matchButtonData.Column = _column;
+            matchButtonData.Row = _row;
+            matchButtonData.InitialStatus = _currentButtonStatus.ToString();
+            matchButtonData.FinalStatus = _currentButtonSolutionStatus.ToString();
 
             return matchButtonData;
         }
