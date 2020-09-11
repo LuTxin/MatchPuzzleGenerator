@@ -134,7 +134,7 @@ public class Main : MonoBehaviour
             quizData._row = _row;
             quizData._type = _gameType;
             quizData._matchNumber = _matchNum;
-            
+            quizData._handCapability = _handCapability;
             
             StringWriter stringWriter = new StringWriter();
             JsonWriter jsonWriter = new JsonTextWriter(stringWriter);
@@ -146,6 +146,8 @@ public class Main : MonoBehaviour
             streamWriter.Flush();
             
             _statusLabel.text = "Json generated";
+            
+            streamWriter.Close();
         }
     }
 }

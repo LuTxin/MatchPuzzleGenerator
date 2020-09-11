@@ -19,5 +19,8 @@ namespace DefaultNamespace
 
         [JsonProperty("MatchNum")] 
         public int _matchNumber;
+        
+        [JsonProperty("HandCapability")] 
+        public int _handCapability;
     }
 }
