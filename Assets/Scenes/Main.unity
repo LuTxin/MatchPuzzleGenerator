@@ -2645,6 +2645,7 @@ MonoBehaviour:
   _rowInputField: {fileID: 287461686}
   _columnInputField: {fileID: 726145146}
   _matchNumInputField: {fileID: 2033164124}
+  _handCapabilityInputField: {fileID: 1330845723}
   _typeDropDown: {fileID: 127526272}
   _generateFrameButton: {fileID: 1310268312}
   _toggleAnswerButton: {fileID: 1207613555}

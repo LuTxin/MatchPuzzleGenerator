@@ -141,7 +141,7 @@ public class Main : MonoBehaviour
             JsonSerializer jsonSerializer = JsonSerializer.Create();
             jsonSerializer.Serialize(jsonWriter, quizData);
 
-            StreamWriter streamWriter = new StreamWriter("/Users/lu.zhang/MatchGenerater/QuizData/untitled");
+            StreamWriter streamWriter = new StreamWriter("/Users/lu.zhang/MatchPuzzleGenerator/QuizData/Generated");
             streamWriter.Write(stringWriter.ToString());
             streamWriter.Flush();
             
