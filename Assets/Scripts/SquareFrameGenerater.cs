@@ -24,9 +24,16 @@ namespace DefaultNamespace
             _isAnswerMode = false;
             _panel = panel;
             
-            RectTransform matchRect = match.GetComponent<RectTransform>();
-            float matchHeight = matchRect.sizeDelta.y;
-            float matchWidth = matchRect.sizeDelta.x;
+            RectTransform matchRectTransform = match.GetComponent<RectTransform>();
+            Rect matchRect = matchRectTransform.rect;
+            Vector2 targetSize = new Vector2();
+            targetSize.x = (column + 1) * matchRect.width + column * matchRect.height;
+            targetSize.y = (row + 1) * matchRect.width + row * matchRect.height;
+            float scalingFactor = GetRestrictionFactor(targetSize.x + MatchGeneraterConstants.PaddlingX * 2, targetSize.y + MatchGeneraterConstants.PaddlingY * 2, panel.rect.width, panel.rect.height);
+            float matchWidth = matchRect.width * scalingFactor;
+            float matchHeight = matchRect.height * scalingFactor;
+            matchRectTransform.sizeDelta = new Vector2(matchWidth, matchHeight); ;
+            
             float offsetX = (matchWidth * (column + 1) + matchHeight * column) / 2f;
             float offsetY = (matchHeight * row + matchWidth * (row + 1)) / 2f;
             
@@ -190,6 +197,28 @@ namespace DefaultNamespace
             }
 
             return matchButtonDatas;
+        }
+        
+        public static float GetRestrictionFactor(float rectWidth, float rectHeight, float restrictionWidth, float restrictionHeight)
+        {
+            float scalingFactor = 0f;
+            
+            if (restrictionWidth < rectWidth && restrictionHeight > rectHeight)
+            {
+                scalingFactor = restrictionWidth / rectWidth;
+            }
+            else if (restrictionWidth > rectWidth && restrictionHeight < rectHeight)
+            {
+                scalingFactor = restrictionHeight / rectHeight;
+            }
+            else
+            {
+                float scaleFactorWidth  = restrictionWidth / rectWidth;
+                float scaleFactorHeight = restrictionHeight / rectHeight;
+                scalingFactor = Mathf.Min(scaleFactorWidth, scaleFactorHeight);
+            }
+
+            return scalingFactor;
         }
     }
 }

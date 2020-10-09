@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
-    public enum  ButtonStatus
+    public enum  MatchStatus
     {
         Locked,
         Placed,
@@ -16,63 +16,92 @@ namespace DefaultNamespace
     public class MatchButton: MonoBehaviour
     {
         [SerializeField] private Button _matchButton;
-        [SerializeField] private Image _buttonImage;
+    
+        [SerializeField] private Transform _stroke;
+        [SerializeField] private Transform _concrete;
+        [SerializeField] private Transform _invisible;
+        [SerializeField] private Transform _indicator;
         
-        [JsonProperty]
-        public ButtonStatus _currentButtonStatus;
         
-        public ButtonStatus CurrentButtonStatus
+        [JsonProperty] [HideInInspector]
+        public MatchStatus currentMatchStatus;
+        
+        public MatchStatus CurrentMatchStatus
         {
-            get => _currentButtonStatus;
+            get => currentMatchStatus;
             set
             {
-                _currentButtonStatus = value;
+                currentMatchStatus = value;
                 switch (value)
                 {
-                    case ButtonStatus.Invisible:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 0.2f);
+                    case MatchStatus.Invisible:
+                        _invisible.gameObject.SetActive(true);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Locked:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 1f);
+                    case MatchStatus.Locked:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(true);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Removed:
-                        _buttonImage.color = new Color(0f, 0f, 1f, 0.5f);
+                    case MatchStatus.Placed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(true);
                         break;
-                    case ButtonStatus.Placed:
-                        _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
+                    case MatchStatus.Removed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(true);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
                 }
             }
         }
 
-        public ButtonStatus _currentButtonSolutionStatus;
+        [HideInInspector] public MatchStatus currentMatchSolutionStatus;
 
-        public ButtonStatus CurrentButtonSolutionStatus
+        public MatchStatus CurrentMatchSolutionStatus
         {
-            get => _currentButtonSolutionStatus;
+            get => currentMatchSolutionStatus;
             set
             {
-                _currentButtonSolutionStatus = value;
+                currentMatchSolutionStatus = value;
                 switch (value)
                 {
-                    case ButtonStatus.Invisible:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 0.2f);
+                    case MatchStatus.Invisible:
+                        _invisible.gameObject.SetActive(true);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Locked:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 1f);
+                    case MatchStatus.Locked:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(true);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Placed:
-                        _buttonImage.color = new Color(0f, 1f, 0f, 0.5f);
+                    case MatchStatus.Placed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(true);
                         break;
-                    case ButtonStatus.Removed:
-                        _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
+                    case MatchStatus.Removed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(true);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
                 }
             }
         }
 
-        public int _column;
-        public int _row;
+        [HideInInspector] public int _column;
+        [HideInInspector]public int _row;
 
         public int Column
         {
@@ -88,8 +117,8 @@ namespace DefaultNamespace
         
         private void Start()
         {
-            CurrentButtonStatus = ButtonStatus.Locked;
-            CurrentButtonSolutionStatus = ButtonStatus.Locked;
+            CurrentMatchStatus = MatchStatus.Locked;
+            CurrentMatchSolutionStatus = MatchStatus.Locked;
             SetInteractiveMethod(false);
         }
 
@@ -99,38 +128,62 @@ namespace DefaultNamespace
             if (!isAnswerMode)
             {
                 _matchButton.onClick.AddListener(OnButtonPressed);
-                switch (_currentButtonStatus)
+                switch (currentMatchStatus)
                 {
-                    case ButtonStatus.Invisible:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 0.2f);
+                    case MatchStatus.Invisible:
+                        _invisible.gameObject.SetActive(true);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Locked:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 1f);
+                    case MatchStatus.Locked:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(true);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Removed:
-                        _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
+                    case MatchStatus.Placed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(true);
                         break;
-                    case ButtonStatus.Placed:
-                        _buttonImage.color = new Color(0f, 0f, 1f, 0.5f);
+                    case MatchStatus.Removed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(true);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
                 }
             }
             else
             {
                 _matchButton.onClick.AddListener(OnSolutionButtonPressed);
-                switch (_currentButtonSolutionStatus)
+                switch (currentMatchSolutionStatus)
                 {
-                    case ButtonStatus.Invisible:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 0.2f);
+                    case MatchStatus.Invisible:
+                        _invisible.gameObject.SetActive(true);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Locked:
-                        _buttonImage.color = new Color(1f, 1f, 1f, 1f);
+                    case MatchStatus.Locked:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(true);
+                        _indicator.gameObject.SetActive(false);
                         break;
-                    case ButtonStatus.Placed:
-                        _buttonImage.color = new Color(0f, 0f, 1f, 0.5f);
+                    case MatchStatus.Placed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(false);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(true);
                         break;
-                    case ButtonStatus.Removed:
-                        _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
+                    case MatchStatus.Removed:
+                        _invisible.gameObject.SetActive(false);
+                        _stroke.gameObject.SetActive(true);
+                        _concrete.gameObject.SetActive(false);
+                        _indicator.gameObject.SetActive(false);
                         break;
                 }
             }
@@ -138,24 +191,24 @@ namespace DefaultNamespace
         
         private void OnButtonPressed()
         {
-            int currentButtonStatusInt = (int) CurrentButtonStatus;
+            int currentButtonStatusInt = (int) CurrentMatchStatus;
             currentButtonStatusInt++;
             currentButtonStatusInt %= 4;
-            CurrentButtonStatus = (ButtonStatus)currentButtonStatusInt;
+            CurrentMatchStatus = (MatchStatus)currentButtonStatusInt;
 
-            switch (CurrentButtonStatus)
+            switch (CurrentMatchStatus)
             {
-                case ButtonStatus.Invisible:
-                    _currentButtonSolutionStatus = ButtonStatus.Invisible;
+                case MatchStatus.Invisible:
+                    currentMatchSolutionStatus = MatchStatus.Invisible;
                     break;
-                case ButtonStatus.Locked:
-                    _currentButtonSolutionStatus = ButtonStatus.Locked;
+                case MatchStatus.Locked:
+                    currentMatchSolutionStatus = MatchStatus.Locked;
                     break;
                 default:
-                    if (_currentButtonSolutionStatus == ButtonStatus.Invisible
-                        || _currentButtonSolutionStatus == ButtonStatus.Locked)
+                    if (currentMatchSolutionStatus == MatchStatus.Invisible
+                        || currentMatchSolutionStatus == MatchStatus.Locked)
                     {
-                        _currentButtonSolutionStatus = ButtonStatus.Removed;
+                        currentMatchSolutionStatus = MatchStatus.Removed;
                     }
                     break;
             }
@@ -164,19 +217,19 @@ namespace DefaultNamespace
         
         private void OnSolutionButtonPressed()
         {
-            if (CurrentButtonStatus == ButtonStatus.Invisible 
-                || CurrentButtonStatus == ButtonStatus.Locked)
+            if (CurrentMatchStatus == MatchStatus.Invisible 
+                || CurrentMatchStatus == MatchStatus.Locked)
             {
                 return;
             }
 
-            if (CurrentButtonSolutionStatus == ButtonStatus.Placed)
+            if (CurrentMatchSolutionStatus == MatchStatus.Placed)
             {
-                CurrentButtonSolutionStatus = ButtonStatus.Removed;
+                CurrentMatchSolutionStatus = MatchStatus.Removed;
             }
             else
             {
-                CurrentButtonSolutionStatus = ButtonStatus.Placed;
+                CurrentMatchSolutionStatus = MatchStatus.Placed;
             }
         }
 
@@ -186,8 +239,8 @@ namespace DefaultNamespace
             matchButtonData.Rotation = (int)transform.rotation.eulerAngles.z;
             matchButtonData.Column = _column;
             matchButtonData.Row = _row;
-            matchButtonData.InitialStatus = _currentButtonStatus.ToString();
-            matchButtonData.FinalStatus = _currentButtonSolutionStatus.ToString();
+            matchButtonData.InitialStatus = currentMatchStatus.ToString();
+            matchButtonData.FinalStatus = currentMatchSolutionStatus.ToString();
 
             return matchButtonData;
         }
