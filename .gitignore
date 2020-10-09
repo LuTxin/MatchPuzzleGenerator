@@ -1,0 +1,22 @@
+/.vs/
+/[Oo]bj/
+/[Ll]ibrary/
+/[Tt]emp/
+/UGetPackages/
+/[Ll]ogs/
+/.idea/
+.signature.p7s
+*.nupkg
+*.nupkg.meta
+*.unitypackage
+*.unitypackage.meta
+*.csproj
+*.sln
+/Logs/IncrementalCompiler/
+*.user
+__pycache__/
+
+#For Automation
+fastlane/README.md
+fastlane/report.xml
+Build/
