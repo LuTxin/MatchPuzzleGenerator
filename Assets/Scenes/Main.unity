@@ -1177,7 +1177,11 @@ MonoBehaviour:
   _matchPanel: {fileID: 1105272141}
   _exportJsonButton: {fileID: 964929809}
   _statusLabel: {fileID: 810764157}
+  _initializationPanel: {fileID: 420232770}
+  _processPanel: {fileID: 742829834}
   _matchObject: {fileID: 103828399}
+  _inventoryMatchObject: {fileID: 1527742198}
+  inventoryPanel: {fileID: 1380644972}
 --- !u!1 &281764232
 GameObject:
   m_ObjectHideFlags: 0
@@ -2952,8 +2956,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 538, y: 576}
-  m_SizeDelta: {x: 417.2, y: 106.2}
+  m_AnchoredPosition: {x: 817.2, y: 436.6}
+  m_SizeDelta: {x: 1121.6, y: 53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &810764157
 MonoBehaviour:
@@ -2986,7 +2990,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Standing By
 --- !u!222 &810764158
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5248,6 +5252,12 @@ Transform:
   m_Father: {fileID: 1887494468}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &1380644972 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3038803563745697497, guid: a12cd0225549e407687c353440761030,
+    type: 3}
+  m_PrefabInstance: {fileID: 1527742197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1383139713
 GameObject:
   m_ObjectHideFlags: 0
@@ -5706,6 +5716,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a12cd0225549e407687c353440761030, type: 3}
+--- !u!1 &1527742198 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 821779092484418349, guid: a12cd0225549e407687c353440761030,
+    type: 3}
+  m_PrefabInstance: {fileID: 1527742197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1528439757
 GameObject:
   m_ObjectHideFlags: 0
@@ -6172,7 +6188,11 @@ MonoBehaviour:
   _matchPanel: {fileID: 1317899095}
   _exportJsonButton: {fileID: 1060009703}
   _statusLabel: {fileID: 1825332821}
+  _initializationPanel: {fileID: 0}
+  _processPanel: {fileID: 0}
   _matchObject: {fileID: 1364701348}
+  _inventoryMatchObject: {fileID: 0}
+  inventoryPanel: {fileID: 0}
 --- !u!1 &1634110833
 GameObject:
   m_ObjectHideFlags: 0

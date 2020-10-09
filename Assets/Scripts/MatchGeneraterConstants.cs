@@ -1,5 +1,11 @@
 namespace DefaultNamespace
 {
+    enum ControlPanelType
+    {
+        Initialization,
+        processing
+    }
+    
     public class MatchGeneraterConstants
     {
         public const string Square = "Square";

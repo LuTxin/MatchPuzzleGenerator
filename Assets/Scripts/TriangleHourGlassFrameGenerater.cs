@@ -35,10 +35,22 @@ namespace DefaultNamespace
             _row = row;
             _column = column;
 
-            RectTransform matchRect = match.GetComponent<RectTransform>();
-            float matchHeight = matchRect.sizeDelta.y;
-            float matchWidth = matchRect.sizeDelta.x;
-            
+            //
+            //restrict the match size
+            RectTransform matchRectTransform = match.GetComponent<RectTransform>();
+            Rect matchRect = matchRectTransform.rect;
+            Vector2 targetSize = new Vector2();
+            targetSize.x = (matchRect.height + matchRect.width) * (int) Math.Ceiling((float) column / 2f) +
+                           matchRect.width;
+            targetSize.y = row * (matchRect.width + matchRect.height * (float) Math.Cos(Math.PI / 6f)) +
+                           matchRect.width;
+            float scalingFactor = Main.GetRestrictionFactor(targetSize.x + MatchGeneraterConstants.PaddlingX * 2,
+                targetSize.y + MatchGeneraterConstants.PaddlingY * 2, panel.rect.width, panel.rect.height);
+            float matchWidth = matchRect.width * scalingFactor;
+            float matchHeight = matchRect.height * scalingFactor;
+            matchRectTransform.sizeDelta = new Vector2(matchWidth, matchHeight);
+            //
+
             int currentColumn = 0;
             float xOffset = 0;
             float yOffset = 0;

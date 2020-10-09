@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DefaultNamespace;
 using Newtonsoft.Json;
 using UnityEditor;
@@ -9,8 +10,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
+
 public class Main : MonoBehaviour
 {
+    //Control panel
     [SerializeField] private InputField _rowInputField;
     [SerializeField] private InputField _columnInputField;
     [SerializeField] private InputField _matchNumInputField;
@@ -22,7 +25,16 @@ public class Main : MonoBehaviour
     [SerializeField] private Button _exportJsonButton;
     [SerializeField] private Text _statusLabel;
     
+    //main
+    [SerializeField] private GameObject _initializationPanel;
+    [SerializeField] private GameObject _processPanel;
     [SerializeField] private GameObject _matchObject;
+    [SerializeField] private GameObject _inventoryMatchObject;
+    
+    //Inventory
+    [SerializeField] private Transform inventoryPanel;
+    
+    
     // Start is called before the first frame update
 
     private string _gameType;
@@ -32,6 +44,8 @@ public class Main : MonoBehaviour
     private int _handCapability;
     private IFrameGenerater _frameGenerater;
 
+    private List<MatchButton> _inventoryMatches;
+    
     private void Start()
     {
         List<string> options = new List<string>();
@@ -42,6 +56,8 @@ public class Main : MonoBehaviour
         _generateFrameButton.onClick.AddListener(OnGenerateFrameButtonClicked);
         _toggleAnswerButton.onClick.AddListener(ToggleAnswer);
         _exportJsonButton.onClick.AddListener(ExportJson);
+        
+        _inventoryMatches = new List<MatchButton>();
     }
 
     private void OnDestroy()
@@ -80,6 +96,7 @@ public class Main : MonoBehaviour
         }
         
         GenerateFrame();
+        SetupInventory();
     }
 
     private void GenerateFrame()
@@ -106,7 +123,42 @@ public class Main : MonoBehaviour
                 _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Barrel);
                 break;
         }
+
+        ChangePanel(ControlPanelType.processing);
     }
+
+    private void SetupInventory()
+    {
+        for (int i = 0; i < _handCapability; i++)
+        {
+            GameObject newMatch = GameObject.Instantiate(_inventoryMatchObject, Vector3.zero, Quaternion.identity, inventoryPanel);
+            newMatch.transform.Rotate(Vector3.forward, 90);
+            newMatch.GetComponent<Button>().enabled = false;
+            newMatch.SetActive(true);
+            
+            _inventoryMatches.Add(newMatch.GetComponent<MatchButton>());
+        }
+
+        StartCoroutine(SetMatchStatus());
+    }
+
+    private IEnumerator SetMatchStatus()
+    {
+        yield return null;
+        
+        for (int i = 0; i < _matchNum; i++)
+        {
+            _inventoryMatches[i].CurrentMatchStatus = MatchStatus.Placed;
+        }
+
+        for (int i = _matchNum; i < _handCapability; i++)
+        {
+            _inventoryMatches[i].CurrentMatchStatus = MatchStatus.Removed;
+        }
+        
+        yield return null;
+    }
+    
 
     private void ToggleAnswer()
     {
@@ -135,7 +187,7 @@ public class Main : MonoBehaviour
             quizData._type = _gameType;
             quizData._matchNumber = _matchNum;
             quizData._handCapability = _handCapability;
-            
+
             StringWriter stringWriter = new StringWriter();
             JsonWriter jsonWriter = new JsonTextWriter(stringWriter);
             JsonSerializer jsonSerializer = JsonSerializer.Create();
@@ -144,10 +196,38 @@ public class Main : MonoBehaviour
             StreamWriter streamWriter = new StreamWriter("/Users/lu.zhang/MatchPuzzleGenerator/QuizData/Generated");
             streamWriter.Write(stringWriter.ToString());
             streamWriter.Flush();
-            
+
             _statusLabel.text = "Json generated";
-            
+
             streamWriter.Close();
         }
+    }
+    
+    public static float GetRestrictionFactor(float rectWidth, float rectHeight, float restrictionWidth, float restrictionHeight)
+    {
+        float scalingFactor = 0f;
+            
+        if (restrictionWidth < rectWidth && restrictionHeight > rectHeight)
+        {
+            scalingFactor = restrictionWidth / rectWidth;
+        }
+        else if (restrictionWidth > rectWidth && restrictionHeight < rectHeight)
+        {
+            scalingFactor = restrictionHeight / rectHeight;
+        }
+        else
+        {
+            float scaleFactorWidth  = restrictionWidth / rectWidth;
+            float scaleFactorHeight = restrictionHeight / rectHeight;
+            scalingFactor = Mathf.Min(scaleFactorWidth, scaleFactorHeight);
+        }
+
+        return scalingFactor;
+    }
+    
+    private void ChangePanel(ControlPanelType type)
+    {
+        _initializationPanel.SetActive(type == ControlPanelType.Initialization);
+        _processPanel.SetActive(type == ControlPanelType.processing);
     }
 }
