@@ -8,16 +8,8 @@ namespace DefaultNamespace
     public enum  ButtonStatus
     {
         Locked,
-        CanRemove,
-        CanPlace,
-        Invisible
-    }
-    
-    public enum  ButtonSolutionStatus
-    {
-        Locked,
-        IsAnswer,
-        IsNotAnswer,
+        Placed,
+        Removed,
         Invisible
     }
 
@@ -43,19 +35,19 @@ namespace DefaultNamespace
                     case ButtonStatus.Locked:
                         _buttonImage.color = new Color(1f, 1f, 1f, 1f);
                         break;
-                    case ButtonStatus.CanPlace:
+                    case ButtonStatus.Removed:
                         _buttonImage.color = new Color(0f, 0f, 1f, 0.5f);
                         break;
-                    case ButtonStatus.CanRemove:
+                    case ButtonStatus.Placed:
                         _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
                         break;
                 }
             }
         }
 
-        public ButtonSolutionStatus _currentButtonSolutionStatus;
+        public ButtonStatus _currentButtonSolutionStatus;
 
-        public ButtonSolutionStatus CurrentButtonSolutionStatus
+        public ButtonStatus CurrentButtonSolutionStatus
         {
             get => _currentButtonSolutionStatus;
             set
@@ -63,16 +55,16 @@ namespace DefaultNamespace
                 _currentButtonSolutionStatus = value;
                 switch (value)
                 {
-                    case ButtonSolutionStatus.Invisible:
+                    case ButtonStatus.Invisible:
                         _buttonImage.color = new Color(1f, 1f, 1f, 0.2f);
                         break;
-                    case ButtonSolutionStatus.Locked:
+                    case ButtonStatus.Locked:
                         _buttonImage.color = new Color(1f, 1f, 1f, 1f);
                         break;
-                    case ButtonSolutionStatus.IsAnswer:
+                    case ButtonStatus.Placed:
                         _buttonImage.color = new Color(0f, 1f, 0f, 0.5f);
                         break;
-                    case ButtonSolutionStatus.IsNotAnswer:
+                    case ButtonStatus.Removed:
                         _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
                         break;
                 }
@@ -97,7 +89,7 @@ namespace DefaultNamespace
         private void Start()
         {
             CurrentButtonStatus = ButtonStatus.Locked;
-            CurrentButtonSolutionStatus = ButtonSolutionStatus.Locked;
+            CurrentButtonSolutionStatus = ButtonStatus.Locked;
             SetInteractiveMethod(false);
         }
 
@@ -115,11 +107,11 @@ namespace DefaultNamespace
                     case ButtonStatus.Locked:
                         _buttonImage.color = new Color(1f, 1f, 1f, 1f);
                         break;
-                    case ButtonStatus.CanPlace:
-                        _buttonImage.color = new Color(0f, 0f, 1f, 0.5f);
-                        break;
-                    case ButtonStatus.CanRemove:
+                    case ButtonStatus.Removed:
                         _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
+                        break;
+                    case ButtonStatus.Placed:
+                        _buttonImage.color = new Color(0f, 0f, 1f, 0.5f);
                         break;
                 }
             }
@@ -128,16 +120,16 @@ namespace DefaultNamespace
                 _matchButton.onClick.AddListener(OnSolutionButtonPressed);
                 switch (_currentButtonSolutionStatus)
                 {
-                    case ButtonSolutionStatus.Invisible:
+                    case ButtonStatus.Invisible:
                         _buttonImage.color = new Color(1f, 1f, 1f, 0.2f);
                         break;
-                    case ButtonSolutionStatus.Locked:
+                    case ButtonStatus.Locked:
                         _buttonImage.color = new Color(1f, 1f, 1f, 1f);
                         break;
-                    case ButtonSolutionStatus.IsAnswer:
-                        _buttonImage.color = new Color(0f, 1f, 0f, 0.5f);
+                    case ButtonStatus.Placed:
+                        _buttonImage.color = new Color(0f, 0f, 1f, 0.5f);
                         break;
-                    case ButtonSolutionStatus.IsNotAnswer:
+                    case ButtonStatus.Removed:
                         _buttonImage.color = new Color(1f, 0f, 0f, 0.5f);
                         break;
                 }
@@ -154,16 +146,16 @@ namespace DefaultNamespace
             switch (CurrentButtonStatus)
             {
                 case ButtonStatus.Invisible:
-                    _currentButtonSolutionStatus = ButtonSolutionStatus.Invisible;
+                    _currentButtonSolutionStatus = ButtonStatus.Invisible;
                     break;
                 case ButtonStatus.Locked:
-                    _currentButtonSolutionStatus = ButtonSolutionStatus.Locked;
+                    _currentButtonSolutionStatus = ButtonStatus.Locked;
                     break;
                 default:
-                    if (_currentButtonSolutionStatus == ButtonSolutionStatus.Invisible
-                        || _currentButtonSolutionStatus == ButtonSolutionStatus.Locked)
+                    if (_currentButtonSolutionStatus == ButtonStatus.Invisible
+                        || _currentButtonSolutionStatus == ButtonStatus.Locked)
                     {
-                        _currentButtonSolutionStatus = ButtonSolutionStatus.IsNotAnswer;
+                        _currentButtonSolutionStatus = ButtonStatus.Removed;
                     }
                     break;
             }
@@ -178,13 +170,13 @@ namespace DefaultNamespace
                 return;
             }
 
-            if (CurrentButtonSolutionStatus == ButtonSolutionStatus.IsAnswer)
+            if (CurrentButtonSolutionStatus == ButtonStatus.Placed)
             {
-                CurrentButtonSolutionStatus = ButtonSolutionStatus.IsNotAnswer;
+                CurrentButtonSolutionStatus = ButtonStatus.Removed;
             }
             else
             {
-                CurrentButtonSolutionStatus = ButtonSolutionStatus.IsAnswer;
+                CurrentButtonSolutionStatus = ButtonStatus.Placed;
             }
         }
 
