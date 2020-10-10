@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -19,7 +20,26 @@ namespace DefaultNamespace
             return _isAnswerMode;
         }
 
-        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match, string direction)
+        public void SetInvisibleMatchColor(Color color)
+        {
+            foreach (var matchButtons in _horizontalMatchButtons)
+            {
+                foreach (var matchButton in matchButtons)
+                {
+                    matchButton.SetInvisibleMatchColor(color);
+                }
+            }
+            
+            foreach (var matchButtons in _verticalMatchButtons)
+            {
+                foreach (var matchButton in matchButtons)
+                {
+                    matchButton.SetInvisibleMatchColor(color);
+                }
+            }
+        }
+
+        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match, string direction, Color invisibleMatchColor)
         {
             _isAnswerMode = false;
             _panel = panel;
@@ -32,8 +52,7 @@ namespace DefaultNamespace
             float scalingFactor = Main.GetRestrictionFactor(targetSize.x + MatchGeneraterConstants.PaddlingX * 2, targetSize.y + MatchGeneraterConstants.PaddlingY * 2, panel.rect.width, panel.rect.height);
             float matchWidth = matchRect.width * scalingFactor;
             float matchHeight = matchRect.height * scalingFactor;
-            matchRectTransform.sizeDelta = new Vector2(matchWidth, matchHeight); ;
-            
+
             float offsetX = (matchWidth * (column + 1) + matchHeight * column) / 2f;
             float offsetY = (matchHeight * row + matchWidth * (row + 1)) / 2f;
             
@@ -65,7 +84,7 @@ namespace DefaultNamespace
                 {
                     GameObject newMatch = GameObject.Instantiate(match, Vector3.zero, Quaternion.identity, panel);
                     RectTransform newMatchRect = newMatch.GetComponent<RectTransform>();
-
+                    newMatchRect.sizeDelta = new Vector2(matchWidth, matchHeight); ;
                     //draw horizontal
                     newMatchRect.Rotate(0, 0, -90);
                     float horizontalX = (matchHeight + matchWidth) * j + matchWidth + matchHeight / 2f;
@@ -79,6 +98,7 @@ namespace DefaultNamespace
                     //draw vertical
                     newMatch = GameObject.Instantiate(match, Vector3.zero, Quaternion.identity, panel);
                     newMatchRect = newMatch.GetComponent<RectTransform>();
+                    newMatchRect.sizeDelta = new Vector2(matchWidth, matchHeight);
                     
                     float verticalX = (matchHeight + matchWidth) * j + matchWidth / 2f;
                     float verticalY = (matchHeight + matchWidth) * i + matchWidth + matchHeight / 2f;
@@ -93,7 +113,8 @@ namespace DefaultNamespace
                         //draw vertical
                         newMatch = GameObject.Instantiate(match, Vector3.zero, Quaternion.identity, panel);
                         newMatchRect = newMatch.GetComponent<RectTransform>();
-                    
+                        newMatchRect.sizeDelta = new Vector2(matchWidth, matchHeight);
+                        
                         verticalX = (matchHeight + matchWidth) * (j + 1) + matchWidth / 2f;
                         verticalY = (matchHeight + matchWidth) * i + matchWidth + matchHeight / 2f;
                         newMatchRect.anchoredPosition = new Vector2(verticalX - offsetX, -verticalY + offsetY);
@@ -108,6 +129,7 @@ namespace DefaultNamespace
                         //draw horizontal
                         newMatch = GameObject.Instantiate(match, Vector3.zero, Quaternion.identity, panel);
                         newMatchRect = newMatch.GetComponent<RectTransform>();
+                        newMatchRect.sizeDelta = new Vector2(matchWidth, matchHeight);
                         
                         newMatchRect.Rotate(0, 0, -90);
                         horizontalX = (matchHeight + matchWidth) * j + matchWidth + matchHeight / 2f;
@@ -120,6 +142,8 @@ namespace DefaultNamespace
                     }
                 }
             }
+
+            SetInvisibleMatchColor(invisibleMatchColor);
         }
 
         public void CleanFrame()

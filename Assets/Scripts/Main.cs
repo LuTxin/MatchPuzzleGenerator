@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using DefaultNamespace;
 using Newtonsoft.Json;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
-
 
 public class Main : MonoBehaviour
 {
@@ -24,6 +20,10 @@ public class Main : MonoBehaviour
     [SerializeField] private RectTransform _matchPanel;
     [SerializeField] private Button _exportJsonButton;
     [SerializeField] private Text _statusLabel;
+
+    [SerializeField] private Button _restartButton;
+    [SerializeField] private Button _hideInvisibleMatchButton;
+    [SerializeField] private Text _hideInvisibleMatchButtonText;
     
     //main
     [SerializeField] private GameObject _initializationPanel;
@@ -43,9 +43,20 @@ public class Main : MonoBehaviour
     private int _matchNum;
     private int _handCapability;
     private IFrameGenerater _frameGenerater;
-
-    private List<MatchButton> _inventoryMatches;
+    private bool _showInvisibleMatch = false;
     
+    private List<MatchButton> _inventoryMatches;
+
+    private Color InvisibleMatchColor
+    {
+        get { return _showInvisibleMatch ? Color.black : Color.clear; }
+    }
+    
+    private string ShowInvisibleMatchButtonText
+    {
+        get { return _showInvisibleMatch ? "Hide Invisible Match" : "Show Invisible Match"; }
+    }
+
     private void Start()
     {
         List<string> options = new List<string>();
@@ -56,6 +67,8 @@ public class Main : MonoBehaviour
         _generateFrameButton.onClick.AddListener(OnGenerateFrameButtonClicked);
         _toggleAnswerButton.onClick.AddListener(ToggleAnswer);
         _exportJsonButton.onClick.AddListener(ExportJson);
+        _restartButton.onClick.AddListener(Restart);
+        _hideInvisibleMatchButton.onClick.AddListener(ToggleInvisibleMatch);
         
         _inventoryMatches = new List<MatchButton>();
     }
@@ -112,15 +125,15 @@ public class Main : MonoBehaviour
         {
             case MatchGeneraterConstants.Square:
                 _frameGenerater = new SquareFrameGenerater();
-                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Square);
+                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Square, InvisibleMatchColor);
                 break;
             case MatchGeneraterConstants.Hourglass:
                 _frameGenerater = new TriangleHourGlassFrameGenerater();
-                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Hourglass);
+                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Hourglass, InvisibleMatchColor);
                 break;
             case MatchGeneraterConstants.Barrel:
                 _frameGenerater = new TriangleHourGlassFrameGenerater();
-                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Barrel);
+                _frameGenerater.GenerateFrame(_row, _column, _matchPanel, _matchObject, MatchGeneraterConstants.Barrel, InvisibleMatchColor);
                 break;
         }
 
@@ -140,6 +153,15 @@ public class Main : MonoBehaviour
         }
 
         StartCoroutine(SetMatchStatus());
+    }
+
+    private void CleanInventory()
+    {
+        for (int i = 0; i < _inventoryMatches.Count; i++)
+        {
+            Destroy(_inventoryMatches[i].gameObject);
+        }
+        _inventoryMatches.Clear();
     }
 
     private IEnumerator SetMatchStatus()
@@ -229,5 +251,20 @@ public class Main : MonoBehaviour
     {
         _initializationPanel.SetActive(type == ControlPanelType.Initialization);
         _processPanel.SetActive(type == ControlPanelType.processing);
+        _hideInvisibleMatchButtonText.text = ShowInvisibleMatchButtonText;
+    }
+
+    private void Restart()
+    {
+        _frameGenerater.CleanFrame();
+        CleanInventory();
+        ChangePanel(ControlPanelType.Initialization);
+    }
+
+    private void ToggleInvisibleMatch()
+    {
+        _showInvisibleMatch = !_showInvisibleMatch;
+        _frameGenerater.SetInvisibleMatchColor(InvisibleMatchColor);
+        _hideInvisibleMatchButtonText.text = ShowInvisibleMatchButtonText;
     }
 }

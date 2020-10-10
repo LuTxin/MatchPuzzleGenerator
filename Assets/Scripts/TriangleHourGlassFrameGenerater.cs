@@ -20,7 +20,7 @@ namespace DefaultNamespace
         private string _direction;
         private int toggleFactor = 1;
         
-        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match, string direction)
+        public void GenerateFrame(int row, int column, RectTransform panel, GameObject match, string direction, Color invisibleColor)
         {
             if (direction == MatchGeneraterConstants.Hourglass)
             {
@@ -48,7 +48,7 @@ namespace DefaultNamespace
                 targetSize.y + MatchGeneraterConstants.PaddlingY * 2, panel.rect.width, panel.rect.height);
             float matchWidth = matchRect.width * scalingFactor;
             float matchHeight = matchRect.height * scalingFactor;
-            matchRectTransform.sizeDelta = new Vector2(matchWidth, matchHeight);
+            
             //
 
             int currentColumn = 0;
@@ -81,7 +81,8 @@ namespace DefaultNamespace
                     GameObject newMatch = GameObject.Instantiate(match, Vector3.zero, Quaternion.identity, panel);
                     RectTransform newMatchRect = newMatch.GetComponent<RectTransform>();
                     matchButton = newMatch.GetComponent<MatchButton>();
-
+                    newMatchRect.sizeDelta = new Vector2(matchWidth, matchHeight);
+                    
                     //draw horizontal
                     newMatchRect.Rotate(0, 0, -90);
                     float horizontalX = (matchHeight + matchWidth) * j + matchWidth + matchHeight / 2f;
@@ -116,6 +117,7 @@ namespace DefaultNamespace
                     GameObject newMatch = GameObject.Instantiate(match, Vector3.zero, Quaternion.identity, panel);
                     RectTransform newMatchRect = newMatch.GetComponent<RectTransform>();
                     matchButton = newMatch.GetComponent<MatchButton>();
+                    newMatchRect.sizeDelta = new Vector2(matchWidth, matchHeight);
                     
                     //draw horizontal
                     newMatchRect.Rotate(0, 0, 30);
@@ -150,6 +152,7 @@ namespace DefaultNamespace
                     GameObject newMatch = GameObject.Instantiate(match, Vector3.zero, Quaternion.identity, panel);
                     RectTransform newMatchRect = newMatch.GetComponent<RectTransform>();
                     matchButton = newMatch.GetComponent<MatchButton>();
+                    newMatchRect.sizeDelta = new Vector2(matchWidth, matchHeight);
                     
                     //draw horizontal
                     newMatchRect.Rotate(0, 0, -30);
@@ -162,6 +165,8 @@ namespace DefaultNamespace
                     matchButton._row = i;
                 }
             }
+            
+            SetInvisibleMatchColor(invisibleColor);
         }
         
 
@@ -243,6 +248,24 @@ namespace DefaultNamespace
         public bool IsAnswerMode()
         {
             return _isAnswerMode;
+        }
+
+        public void SetInvisibleMatchColor(Color color)
+        {
+            foreach (var matchButton in _slashMatchButtons)
+            {
+                matchButton.SetInvisibleMatchColor(color);
+            }
+            
+            foreach (var matchButton in _backslashMatchButtons)
+            {
+                matchButton.SetInvisibleMatchColor(color);
+            }
+            
+            foreach (var matchButton in _horizontalMatchButtons)
+            {
+                matchButton.SetInvisibleMatchColor(color);
+            }
         }
     }
 }

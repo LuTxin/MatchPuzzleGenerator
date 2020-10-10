@@ -22,7 +22,6 @@ namespace DefaultNamespace
         [SerializeField] private Transform _invisible;
         [SerializeField] private Transform _indicator;
         
-        
         [JsonProperty] [HideInInspector]
         public MatchStatus currentMatchStatus;
         
@@ -243,6 +242,11 @@ namespace DefaultNamespace
             matchButtonData.FinalStatus = currentMatchSolutionStatus.ToString();
 
             return matchButtonData;
+        }
+
+        public void SetInvisibleMatchColor(Color color)
+        {
+            _invisible.GetComponent<Image>().color = color;
         }
     }
 }
