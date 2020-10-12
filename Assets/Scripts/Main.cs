@@ -28,7 +28,7 @@ public class Main : MonoBehaviour
     [SerializeField] private Button _hideInvisibleMatchButton;
     [SerializeField] private Text _hideInvisibleMatchButtonText;
     [SerializeField] private Button _resetInventoryButton;
-    
+
     //main
     [SerializeField] private GameObject _initializationPanel;
     [SerializeField] private GameObject _processPanel;
@@ -70,11 +70,10 @@ public class Main : MonoBehaviour
         _typeDropDown.AddOptions(options);
         _generateFrameButton.onClick.AddListener(OnGenerateFrameButtonClicked);
         _toggleAnswerButton.onClick.AddListener(ToggleAnswer);
-        _exportJsonButton.onClick.AddListener(ExportJson);
+        _exportJsonButton.onClick.AddListener(OnExportButtonClicked);
         _restartButton.onClick.AddListener(Restart);
         _hideInvisibleMatchButton.onClick.AddListener(ToggleInvisibleMatch);
         _resetInventoryButton.onClick.AddListener(OnResetInventoryButtonClicked);
-        
         _inventoryMatches = new List<MatchButton>();
     }
 
@@ -82,7 +81,10 @@ public class Main : MonoBehaviour
     {
         _generateFrameButton.onClick.RemoveListener(OnGenerateFrameButtonClicked);
         _toggleAnswerButton.onClick.RemoveListener(ToggleAnswer);
-        _exportJsonButton.onClick.RemoveListener(ExportJson);
+        _exportJsonButton.onClick.RemoveListener(OnExportButtonClicked);
+        _restartButton.onClick.RemoveListener(Restart);
+        _hideInvisibleMatchButton.onClick.RemoveListener(ToggleInvisibleMatch);
+        _resetInventoryButton.onClick.RemoveListener(OnResetInventoryButtonClicked);
     }
 
     private void OnGenerateFrameButtonClicked()
@@ -203,7 +205,7 @@ public class Main : MonoBehaviour
         }
     }
 
-    private void ExportJson()
+    private void ExportJson(string fileName)
     {
         if (_frameGenerater != null)
         {
@@ -220,13 +222,27 @@ public class Main : MonoBehaviour
             JsonSerializer jsonSerializer = JsonSerializer.Create();
             jsonSerializer.Serialize(jsonWriter, quizData);
 
-            StreamWriter streamWriter = new StreamWriter("/Users/lu.zhang/MatchPuzzleGenerator/QuizData/Generated");
+            string path = "./QuizData/" + fileName + ".json";
+            StreamWriter streamWriter = new StreamWriter(path);
             streamWriter.Write(stringWriter.ToString());
             streamWriter.Flush();
 
             _statusLabel.text = "Json generated";
 
             streamWriter.Close();
+
+            try
+            {
+#if UNITY_STANDALONE_WIN
+                System.Diagnostics.Process.Start("explorer.exe", string.Format("/select,{0}", path.Replace('/', '\\')));
+#elif UNITY_STANDALONE_OSX
+                System.Diagnostics.Process.Start("open", string.Format("-R \"{0}\"", path));
+#endif
+            }
+            catch
+            {
+                Debug.LogWarning("failed to open file location");
+            }
         }
     }
     
@@ -285,5 +301,18 @@ public class Main : MonoBehaviour
 
         CleanInventory();
         SetupInventory();
+    }
+
+    private void OnExportButtonClicked()
+    {
+        _popupController.ShowPopup(true, InputFieldType.Single, MatchGeneraterConstants.InputSaveNameString, OnExportPathConfirmed);
+    }
+
+    private void OnExportPathConfirmed(object sender, EventArgs arg)
+    {
+        if (!string.IsNullOrEmpty(_popupController.GetInputFieldText()))
+        {
+            ExportJson(_popupController.GetInputFieldText());
+        }
     }
 }

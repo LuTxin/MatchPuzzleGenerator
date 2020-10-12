@@ -16,5 +16,6 @@ namespace DefaultNamespace
         public const float PaddlingY = 200f;
 
         public const string InputInventoryNumberString = "Please input the initial number of matches can be placed and the maximum number of matches can be removed.";
+        public const string InputSaveNameString = "Please input the file name. ('.json' is not required to be included in the path)";
     }
 }
