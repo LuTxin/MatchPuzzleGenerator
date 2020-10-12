@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\MatchButtonData.cs" />
     <Compile Include="Assets\Scripts\MatchGeneraterConstants.cs" />
     <Compile Include="Assets\Scripts\MatchQuizData.cs" />
+    <Compile Include="Assets\Scripts\PopupController.cs" />
     <Compile Include="Assets\Scripts\SquareFrameGenerater.cs" />
     <Compile Include="Assets\Scripts\TriangleHourGlassFrameGenerater.cs" />
     <None Include="Assets\Library\Newtonsoft.Json.Standalone.Unity\link.xml" />

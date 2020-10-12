@@ -14,5 +14,7 @@ namespace DefaultNamespace
         
         public const float PaddlingX = 100f;
         public const float PaddlingY = 200f;
+
+        public const string InputInventoryNumberString = "Please input the initial number of matches can be placed and the maximum number of matches can be removed.";
     }
 }

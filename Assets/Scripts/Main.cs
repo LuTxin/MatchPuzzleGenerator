@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using DefaultNamespace;
@@ -6,10 +7,12 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
+using Object = UnityEngine.Object;
 
 public class Main : MonoBehaviour
 {
     //Control panel
+    [SerializeField] private PopupController _popupController;
     [SerializeField] private InputField _rowInputField;
     [SerializeField] private InputField _columnInputField;
     [SerializeField] private InputField _matchNumInputField;
@@ -24,6 +27,7 @@ public class Main : MonoBehaviour
     [SerializeField] private Button _restartButton;
     [SerializeField] private Button _hideInvisibleMatchButton;
     [SerializeField] private Text _hideInvisibleMatchButtonText;
+    [SerializeField] private Button _resetInventoryButton;
     
     //main
     [SerializeField] private GameObject _initializationPanel;
@@ -69,6 +73,7 @@ public class Main : MonoBehaviour
         _exportJsonButton.onClick.AddListener(ExportJson);
         _restartButton.onClick.AddListener(Restart);
         _hideInvisibleMatchButton.onClick.AddListener(ToggleInvisibleMatch);
+        _resetInventoryButton.onClick.AddListener(OnResetInventoryButtonClicked);
         
         _inventoryMatches = new List<MatchButton>();
     }
@@ -266,5 +271,19 @@ public class Main : MonoBehaviour
         _showInvisibleMatch = !_showInvisibleMatch;
         _frameGenerater.SetInvisibleMatchColor(InvisibleMatchColor);
         _hideInvisibleMatchButtonText.text = ShowInvisibleMatchButtonText;
+    }
+    
+    private void OnResetInventoryButtonClicked()
+    {
+        _popupController.ShowPopup(true, InputFieldType.Duo, MatchGeneraterConstants.InputInventoryNumberString, OnResetInventoryFinished);
+    }
+
+    private void OnResetInventoryFinished(object sender, EventArgs arg)
+    {
+        int.TryParse(_popupController.GetLeftInputFieldText(), out _matchNum);
+        int.TryParse(_popupController.GetRightInputFieldText(), out _handCapability);
+
+        CleanInventory();
+        SetupInventory();
     }
 }
