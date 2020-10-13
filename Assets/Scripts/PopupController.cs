@@ -49,6 +49,8 @@ namespace DefaultNamespace
             if (OnOkayButtonPressedEventHandler != null)
             {
                 OnOkayButtonPressedEventHandler.Invoke(this, new EventArgs());
+
+                CleanDelegate();
             }
         }
         
@@ -59,6 +61,8 @@ namespace DefaultNamespace
             if (OnCancelButtonPressedEventHandler != null)
             {
                 OnCancelButtonPressedEventHandler.Invoke(this, new EventArgs());
+
+                CleanDelegate();
             }
         }
 
@@ -75,6 +79,25 @@ namespace DefaultNamespace
         public string GetRightInputFieldText()
         {
             return _inputField2.textComponent.text;
+        }
+
+        private void CleanDelegate()
+        {
+            if (OnOkayButtonPressedEventHandler != null)
+            {
+                foreach (Delegate d in OnOkayButtonPressedEventHandler.GetInvocationList())
+                {
+                    OnOkayButtonPressedEventHandler -= (EventHandler) d;
+                }
+            }
+
+            if (OnCancelButtonPressedEventHandler != null)
+            {
+                foreach (Delegate d in OnCancelButtonPressedEventHandler.GetInvocationList())
+                {
+                    OnCancelButtonPressedEventHandler -= (EventHandler) d;
+                }
+            }
         }
     }
 }

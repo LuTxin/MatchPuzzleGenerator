@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using DefaultNamespace;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -23,7 +24,8 @@ public class Main : MonoBehaviour
     [SerializeField] private RectTransform _matchPanel;
     [SerializeField] private Button _exportJsonButton;
     [SerializeField] private Text _statusLabel;
-
+    [SerializeField] private Button _loadButton;
+    
     [SerializeField] private Button _restartButton;
     [SerializeField] private Button _hideInvisibleMatchButton;
     [SerializeField] private Text _hideInvisibleMatchButtonText;
@@ -74,6 +76,7 @@ public class Main : MonoBehaviour
         _restartButton.onClick.AddListener(Restart);
         _hideInvisibleMatchButton.onClick.AddListener(ToggleInvisibleMatch);
         _resetInventoryButton.onClick.AddListener(OnResetInventoryButtonClicked);
+
         _inventoryMatches = new List<MatchButton>();
     }
 
@@ -89,34 +92,114 @@ public class Main : MonoBehaviour
 
     private void OnGenerateFrameButtonClicked()
     {
-        _row = 1;
-        if (!int.TryParse(_rowInputField.text, out _row))
+        StringBuilder warningBuilder = new StringBuilder();
+
+        warningBuilder.Append(ParseRow(_rowInputField.text));
+        warningBuilder.Append(ParseColumn(_columnInputField.text));
+        warningBuilder.Append(ParseMatchNum(_matchNumInputField.text));
+        warningBuilder.Append(ParseHandCapability(_handCapabilityInputField.text));
+        
+        if (warningBuilder.Length > 0)
         {
-            Debug.LogErrorFormat("row invalid. Using {0} instead:", _row);
+            _popupController.ShowPopup(true, InputFieldType.None, warningBuilder.ToString(), null);
         }
         
-        _column = 1;
-        if (!int.TryParse(_columnInputField.text, out _column))
-        {
-            Debug.LogErrorFormat("column invalid. Using {0} instead", _column);
-        }
-
         _gameType = _typeDropDown.options[_typeDropDown.value].text;
-
-        _matchNum = 0;
-        if(!int.TryParse(_matchNumInputField.text, out _matchNum))
-        {
-            Debug.LogErrorFormat("_matchNum invalid. Using {0} instead", _matchNum);
-        }
-
-        _handCapability = 0;
-        if(!int.TryParse(_handCapabilityInputField.text, out _handCapability))
-        {
-            Debug.LogErrorFormat("_handCapability invalid. Using {0} instead", _handCapability);
-        }
         
         GenerateFrame();
         SetupInventory();
+    }
+
+    private string ParseRow(string input)
+    {
+        StringBuilder warningBuilder = new StringBuilder();
+        
+        if (!int.TryParse(input, out _row))
+        {
+            _row = MatchGeneraterConstants.MinRowNumber;
+            warningBuilder.AppendLine("Row number invalid. Using " + _row + " instead.");
+        }
+        else if (_row < MatchGeneraterConstants.MinRowNumber)
+        {
+            _row = MatchGeneraterConstants.MinRowNumber;
+            warningBuilder.AppendLine("Row cannot < " + MatchGeneraterConstants.MinRowNumber + ". Using " + _row + " instead");
+        }
+        else if (_row > MatchGeneraterConstants.MaxRowNumber)
+        {
+            _row = MatchGeneraterConstants.MaxRowNumber;
+            warningBuilder.AppendLine("Row cannot >  "+ MatchGeneraterConstants.MaxRowNumber + ". Using " + _row + " instead");
+        }
+
+        return warningBuilder.ToString();
+    }
+    
+    private string ParseColumn(string input)
+    {
+        StringBuilder warningBuilder = new StringBuilder();
+        
+        if (!int.TryParse(input, out _column))
+        {
+            _column = MatchGeneraterConstants.MinColumnNumber;
+            warningBuilder.AppendLine("Column number invalid. Using " + _column + " instead.");
+        }
+        else if (_column < MatchGeneraterConstants.MinColumnNumber)
+        {
+            _column = MatchGeneraterConstants.MinColumnNumber;
+            warningBuilder.AppendLine("Column cannot < " + MatchGeneraterConstants.MinColumnNumber + ". Using " + _column + " instead");
+        }
+        else if (_column > MatchGeneraterConstants.MaxColumnNumber)
+        {
+            _column = MatchGeneraterConstants.MaxColumnNumber;
+            warningBuilder.AppendLine("Column cannot >  "+ MatchGeneraterConstants.MaxColumnNumber + ". Using " + _column + " instead");
+        }
+
+        return warningBuilder.ToString();
+    }
+    
+    private string ParseMatchNum(string input)
+    {
+        StringBuilder warningBuilder = new StringBuilder();
+        
+        if (!int.TryParse(input, out _matchNum))
+        {
+            _matchNum = MatchGeneraterConstants.MinMatchNumNumber;
+            warningBuilder.AppendLine("MatchNum number invalid. Using " + _matchNum + " instead.");
+        }
+        else if (_matchNum < MatchGeneraterConstants.MinMatchNumNumber)
+        {
+            _matchNum = MatchGeneraterConstants.MinMatchNumNumber;
+            warningBuilder.AppendLine("MatchNum cannot < " + MatchGeneraterConstants.MinMatchNumNumber + ". Using " + _matchNum + " instead");
+        }
+        else if (_matchNum > MatchGeneraterConstants.MaxMatchNumNumber)
+        {
+            _matchNum = MatchGeneraterConstants.MaxMatchNumNumber;
+            warningBuilder.AppendLine("MatchNum cannot >  "+ MatchGeneraterConstants.MaxMatchNumNumber + ". Using " + _matchNum + " instead");
+        }
+
+        return warningBuilder.ToString();
+    }
+
+    private string ParseHandCapability(string input)
+    {
+        StringBuilder warningBuilder = new StringBuilder();
+        
+        if (!int.TryParse(input, out _handCapability))
+        {
+            _handCapability =_matchNum;
+            warningBuilder.AppendLine("HandCapability number invalid. Using " + _handCapability + " instead.");
+        }
+        else if (_handCapability < _matchNum)
+        {
+            _handCapability = _matchNum;
+            warningBuilder.AppendLine("HandCapability cannot < initial match number. Using " + _handCapability + " instead");
+        }
+        else if (_handCapability > MatchGeneraterConstants.MaxHandCapabilityNumber)
+        {
+            _handCapability = MatchGeneraterConstants.MaxHandCapabilityNumber;
+            warningBuilder.AppendLine("HandCapability cannot >  "+ MatchGeneraterConstants.MaxHandCapabilityNumber + ". Using " + _handCapability + " instead");
+        }
+        
+        return warningBuilder.ToString();
     }
 
     private void GenerateFrame()
@@ -245,6 +328,11 @@ public class Main : MonoBehaviour
             }
         }
     }
+
+    private void LoadJson(string fileName)
+    {
+        
+    }
     
     public static float GetRestrictionFactor(float rectWidth, float rectHeight, float restrictionWidth, float restrictionHeight)
     {
@@ -296,8 +384,15 @@ public class Main : MonoBehaviour
 
     private void OnResetInventoryFinished(object sender, EventArgs arg)
     {
-        int.TryParse(_popupController.GetLeftInputFieldText(), out _matchNum);
-        int.TryParse(_popupController.GetRightInputFieldText(), out _handCapability);
+        StringBuilder warningBuilder = new StringBuilder();
+        
+        warningBuilder.Append(ParseMatchNum(_popupController.GetLeftInputFieldText()));
+        warningBuilder.Append(ParseHandCapability(_popupController.GetRightInputFieldText()));
+        
+        if (warningBuilder.Length > 0)
+        {
+            _popupController.ShowPopup(true, InputFieldType.None, warningBuilder.ToString(), null);
+        }
 
         CleanInventory();
         SetupInventory();
@@ -310,9 +405,27 @@ public class Main : MonoBehaviour
 
     private void OnExportPathConfirmed(object sender, EventArgs arg)
     {
+
         if (!string.IsNullOrEmpty(_popupController.GetInputFieldText()))
         {
             ExportJson(_popupController.GetInputFieldText());
+        }
+        else
+        {
+            _popupController.ShowPopup(true, InputFieldType.None, MatchGeneraterConstants.FileNameError, null);
+        }
+    }
+
+    private void OnLoadButtonClicked()
+    {
+        _popupController.ShowPopup(true, InputFieldType.Single, MatchGeneraterConstants.InputLoadNameString, OnLoadPathConfirmed);
+    }
+
+    private void OnLoadPathConfirmed(object sender, EventArgs arg)
+    {
+        if (!string.IsNullOrEmpty(_popupController.GetInputFieldText()))
+        {
+            LoadJson(_popupController.GetInputFieldText());
         }
     }
 }
