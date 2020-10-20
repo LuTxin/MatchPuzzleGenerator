@@ -214,6 +214,7 @@ public class Main : MonoBehaviour
         }
 
         _statusLabel.text = "Edit Initial Status";
+        _toggleAnswerButton.GetComponentInChildren<Text>().text = "Change to final State";
         
         switch (_gameType)
         {
