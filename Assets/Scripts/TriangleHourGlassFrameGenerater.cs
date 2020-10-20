@@ -49,13 +49,11 @@ namespace DefaultNamespace
             float matchWidth = matchRect.width * scalingFactor;
             float matchHeight = matchRect.height * scalingFactor;
             
-            //
-
             int currentColumn = 0;
             float xOffset = 0;
             float yOffset = 0;
 
-            float globalOffsetDeltaX = (matchHeight + matchWidth) * (int)Math.Ceiling((float)column/2f) + matchWidth;
+            float globalOffsetDeltaX = (matchHeight + matchWidth) * (int)Math.Ceiling((float)column/2f) + 2.5f * matchWidth;
             float globalOffsetDeltaY = row * (matchWidth + matchHeight * (float)Math.Cos(Math.PI / 6f)) + matchWidth;
             
             MatchButton matchButton = null;
@@ -73,7 +71,7 @@ namespace DefaultNamespace
                 else
                 {
                     currentColumn = column/2;
-                    xOffset = matchHeight / 2f;
+                    xOffset = matchHeight / 2f + matchWidth/2f;
                 }
                 
                 for (int j = 0; j < currentColumn; j++)
@@ -85,7 +83,7 @@ namespace DefaultNamespace
                     
                     //draw horizontal
                     newMatchRect.Rotate(0, 0, -90);
-                    float horizontalX = (matchHeight + matchWidth) * j + matchWidth + matchHeight / 2f;
+                    float horizontalX = (matchHeight + 2 * matchWidth) * j + matchHeight / 2f;
                     float horizontalY = i * (matchHeight * (float)Math.Cos(Math.PI / 6f) + matchWidth) + matchWidth/2f;
                     newMatchRect.anchoredPosition = new Vector2(horizontalX + xOffset - globalOffsetDeltaX/2f, -horizontalY + globalOffsetDeltaY/2f);
                     newMatch.SetActive(true);
@@ -103,12 +101,12 @@ namespace DefaultNamespace
             {
                 if (i % 2 == toggleFactor)
                 {
-                    xOffset = 0;
+                    xOffset = 0 - matchWidth/2f;
                     currentColumn = 1 + column/2;
                 }
                 else
                 {
-                    xOffset = matchHeight/2f;
+                    xOffset = matchHeight/2f + matchWidth/2f;
                     currentColumn = 1 + (column - 1)/2;
                 }
                 
@@ -121,7 +119,7 @@ namespace DefaultNamespace
                     
                     //draw horizontal
                     newMatchRect.Rotate(0, 0, 30);
-                    float horizontalX = (matchHeight + matchWidth) * j + matchWidth + matchHeight/4f;
+                    float horizontalX = (matchHeight + 2 * matchWidth) * j + matchHeight/4f;
                     float horizontalY = i * (matchWidth + matchHeight * (float)Math.Cos(Math.PI / 6f)) + matchWidth + matchHeight * (float)Math.Cos(Math.PI / 6f)/2f;
                     newMatchRect.anchoredPosition = new Vector2(horizontalX + xOffset - globalOffsetDeltaX/2f, -horizontalY + globalOffsetDeltaY/2f);
                     newMatch.SetActive(true);
@@ -138,12 +136,12 @@ namespace DefaultNamespace
             {
                 if (i % 2 == toggleFactor)
                 {
-                    xOffset = matchHeight/2f;
+                    xOffset = matchHeight/2f + matchWidth/2f;
                     currentColumn = 1 + (column - 1)/2;
                 }
                 else
                 {
-                    xOffset = 0;
+                    xOffset = 0 - matchWidth/2f;
                     currentColumn = 1 + column/2;
                 }
                 
@@ -156,7 +154,7 @@ namespace DefaultNamespace
                     
                     //draw horizontal
                     newMatchRect.Rotate(0, 0, -30);
-                    float horizontalX = (matchHeight + matchWidth) * j + matchWidth + matchHeight/4f;
+                    float horizontalX = (matchHeight + 2 * matchWidth) * j + matchHeight/4f;
                     float horizontalY = i * (matchWidth + matchHeight * (float)Math.Cos(Math.PI / 6f)) + matchWidth + matchHeight * (float)Math.Cos(Math.PI / 6f)/2f;
                     newMatchRect.anchoredPosition = new Vector2(horizontalX + xOffset - globalOffsetDeltaX/2f, -horizontalY + globalOffsetDeltaY/2f);
                     newMatch.SetActive(true);
@@ -189,24 +187,10 @@ namespace DefaultNamespace
                 GameObject.Destroy(_slashMatchButtons[i].gameObject);
             }
             _slashMatchButtons.Clear();
-            
-            
-            _panel.GetComponent<Image>().color = Color.white;
         }
 
         public void ToggleSetAnswerMode()
         {
-            if (_isAnswerMode)
-            {
-                _isAnswerMode = false;
-                _panel.GetComponent<Image>().color = Color.white;
-            }
-            else
-            {
-                _isAnswerMode = true;
-                _panel.GetComponent<Image>().color = Color.gray;
-            }
-            
             for (int i = 0; i < _horizontalMatchButtons.Count; i++)
             {
                 _horizontalMatchButtons[i].SetInteractiveMethod(_isAnswerMode);

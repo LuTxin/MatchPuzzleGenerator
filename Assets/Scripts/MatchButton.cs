@@ -10,7 +10,8 @@ namespace DefaultNamespace
         Locked,
         Placed,
         Removed,
-        Invisible
+        Invisible,
+        ForceHighlight
     }
 
     public class MatchButton: MonoBehaviour
@@ -21,6 +22,7 @@ namespace DefaultNamespace
         [SerializeField] private Transform _concrete;
         [SerializeField] private Transform _invisible;
         [SerializeField] private Transform _indicator;
+        [SerializeField] private Transform _highLight;
         
         [JsonProperty] [HideInInspector]
         public MatchStatus currentMatchStatus;
@@ -31,33 +33,11 @@ namespace DefaultNamespace
             set
             {
                 currentMatchStatus = value;
-                switch (value)
-                {
-                    case MatchStatus.Invisible:
-                        _invisible.gameObject.SetActive(true);
-                        _stroke.gameObject.SetActive(false);
-                        _concrete.gameObject.SetActive(false);
-                        _indicator.gameObject.SetActive(false);
-                        break;
-                    case MatchStatus.Locked:
-                        _invisible.gameObject.SetActive(false);
-                        _stroke.gameObject.SetActive(false);
-                        _concrete.gameObject.SetActive(true);
-                        _indicator.gameObject.SetActive(false);
-                        break;
-                    case MatchStatus.Placed:
-                        _invisible.gameObject.SetActive(false);
-                        _stroke.gameObject.SetActive(false);
-                        _concrete.gameObject.SetActive(false);
-                        _indicator.gameObject.SetActive(true);
-                        break;
-                    case MatchStatus.Removed:
-                        _invisible.gameObject.SetActive(false);
-                        _stroke.gameObject.SetActive(true);
-                        _concrete.gameObject.SetActive(false);
-                        _indicator.gameObject.SetActive(false);
-                        break;
-                }
+                _invisible.gameObject.SetActive(currentMatchStatus == MatchStatus.Invisible);
+                _stroke.gameObject.SetActive(currentMatchStatus == MatchStatus.Removed);
+                _concrete.gameObject.SetActive(currentMatchStatus == MatchStatus.Locked);
+                _indicator.gameObject.SetActive(currentMatchStatus == MatchStatus.Placed);
+                _highLight.gameObject.SetActive(currentMatchStatus == MatchStatus.ForceHighlight);
             }
         }
 
@@ -69,33 +49,11 @@ namespace DefaultNamespace
             set
             {
                 currentMatchSolutionStatus = value;
-                switch (value)
-                {
-                    case MatchStatus.Invisible:
-                        _invisible.gameObject.SetActive(true);
-                        _stroke.gameObject.SetActive(false);
-                        _concrete.gameObject.SetActive(false);
-                        _indicator.gameObject.SetActive(false);
-                        break;
-                    case MatchStatus.Locked:
-                        _invisible.gameObject.SetActive(false);
-                        _stroke.gameObject.SetActive(false);
-                        _concrete.gameObject.SetActive(true);
-                        _indicator.gameObject.SetActive(false);
-                        break;
-                    case MatchStatus.Placed:
-                        _invisible.gameObject.SetActive(false);
-                        _stroke.gameObject.SetActive(false);
-                        _concrete.gameObject.SetActive(false);
-                        _indicator.gameObject.SetActive(true);
-                        break;
-                    case MatchStatus.Removed:
-                        _invisible.gameObject.SetActive(false);
-                        _stroke.gameObject.SetActive(true);
-                        _concrete.gameObject.SetActive(false);
-                        _indicator.gameObject.SetActive(false);
-                        break;
-                }
+                _invisible.gameObject.SetActive(currentMatchSolutionStatus == MatchStatus.Invisible);
+                _stroke.gameObject.SetActive(currentMatchSolutionStatus == MatchStatus.Removed);
+                _concrete.gameObject.SetActive(currentMatchSolutionStatus == MatchStatus.Locked);
+                _indicator.gameObject.SetActive(currentMatchSolutionStatus == MatchStatus.Placed);
+                _highLight.gameObject.SetActive(currentMatchSolutionStatus == MatchStatus.ForceHighlight);
             }
         }
 

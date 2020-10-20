@@ -265,7 +265,7 @@ public class Main : MonoBehaviour
 
         for (int i = _matchNum; i < _handCapability; i++)
         {
-            _inventoryMatches[i].CurrentMatchStatus = MatchStatus.Removed;
+            _inventoryMatches[i].CurrentMatchStatus = MatchStatus.ForceHighlight;
         }
         
         yield return null;
