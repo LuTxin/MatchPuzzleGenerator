@@ -193,6 +193,11 @@ public class Main : MonoBehaviour
             _handCapability = _matchNum;
             warningBuilder.AppendLine("HandCapability cannot < initial match number. Using " + _handCapability + " instead");
         }
+        else if (_handCapability <= 0)
+        {
+            _handCapability = 1;
+            warningBuilder.AppendLine("HandCapability cannot be 0. Using " + _handCapability + " instead");
+        }
         else if (_handCapability > MatchGeneraterConstants.MaxHandCapabilityNumber)
         {
             _handCapability = MatchGeneraterConstants.MaxHandCapabilityNumber;
@@ -279,11 +284,13 @@ public class Main : MonoBehaviour
             _frameGenerater.ToggleSetAnswerMode();
             if (_frameGenerater.IsAnswerMode())
             {
-                _statusLabel.text = "Edit Final Status";
+                _statusLabel.text = "Edit Final State";
+                _toggleAnswerButton.GetComponentInChildren<Text>().text = "Change to initial State";
             }
             else
             {
-                _statusLabel.text = "Edit Initial Status";
+                _statusLabel.text = "Edit Initial State";
+                _toggleAnswerButton.GetComponentInChildren<Text>().text = "Change to final State";
             }
         }
     }
@@ -403,7 +410,46 @@ public class Main : MonoBehaviour
 
     private void OnExportButtonClicked()
     {
-        _popupController.ShowPopup(true, InputFieldType.Single, MatchGeneraterConstants.InputSaveNameString, OnExportPathConfirmed);
+        if (CheckInventory())
+        {
+            _popupController.ShowPopup(true, InputFieldType.Single, MatchGeneraterConstants.InputSaveNameString, OnExportPathConfirmed);
+        }
+    }
+
+    private bool CheckInventory()
+    {
+        int initialRemoved = _frameGenerater.GetInitialRemovedMatchNumber();
+        int initialPlaced = _frameGenerater.GetInitialPlacedMatchNumber();
+        int finalRemoved = _frameGenerater.GetFinalRemovedMatchNumber();
+        int finalPlaced = _frameGenerater.GetFinalPlacedMatchNumber();
+
+        int removed = finalRemoved - initialRemoved;
+        int placed = finalPlaced - initialPlaced;
+
+        StringBuilder warningBuilder = new StringBuilder();
+
+        if (initialRemoved == 0 && initialPlaced == 0)
+        {
+            warningBuilder.AppendLine(MatchGeneraterConstants.InvalidError);
+        }
+        
+        if (_handCapability - _matchNum < removed)
+        {
+            warningBuilder.AppendLine(MatchGeneraterConstants.CapabilityError);
+        }
+
+        if (_matchNum < placed)
+        {
+            warningBuilder.AppendLine(MatchGeneraterConstants.AvailabilityError);
+        }
+        
+        if (warningBuilder.Length > 0)
+        {
+            _popupController.ShowPopup(true, InputFieldType.None, warningBuilder.ToString(), null);
+            return false;
+        }
+        
+        return true;
     }
 
     private void OnExportPathConfirmed(object sender, EventArgs arg)

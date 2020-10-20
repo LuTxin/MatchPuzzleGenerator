@@ -261,5 +261,85 @@ namespace DefaultNamespace
                 matchButton.SetInvisibleMatchColor(color);
             }
         }
+
+        public int GetInitialRemovedMatchNumber()
+        {
+            int removedNumber = 0;
+            for (int i = 0; i < _horizontalMatchButtons.Count; i++)
+            {
+                removedNumber += _horizontalMatchButtons[i].currentMatchStatus == MatchStatus.Removed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _backslashMatchButtons.Count; i++)
+            {
+                removedNumber += _backslashMatchButtons[i].currentMatchStatus == MatchStatus.Removed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _slashMatchButtons.Count; i++)
+            {
+                removedNumber += _slashMatchButtons[i].currentMatchStatus == MatchStatus.Removed ? 1 : 0;
+            }
+            return removedNumber;
+        }
+        
+        public int GetInitialPlacedMatchNumber()
+        {
+            int placedNumber = 0;
+            for (int i = 0; i < _horizontalMatchButtons.Count; i++)
+            {
+                placedNumber += _horizontalMatchButtons[i].currentMatchStatus == MatchStatus.Placed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _backslashMatchButtons.Count; i++)
+            {
+                placedNumber += _backslashMatchButtons[i].currentMatchStatus == MatchStatus.Placed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _slashMatchButtons.Count; i++)
+            {
+                placedNumber += _slashMatchButtons[i].currentMatchStatus == MatchStatus.Placed ? 1 : 0;
+            }
+            return placedNumber;
+        }
+        
+        public int GetFinalRemovedMatchNumber()
+        {
+            int removedNumber = 0;
+            for (int i = 0; i < _horizontalMatchButtons.Count; i++)
+            {
+                removedNumber += _horizontalMatchButtons[i].currentMatchSolutionStatus == MatchStatus.Removed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _backslashMatchButtons.Count; i++)
+            {
+                removedNumber += _backslashMatchButtons[i].currentMatchSolutionStatus == MatchStatus.Removed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _slashMatchButtons.Count; i++)
+            {
+                removedNumber += _slashMatchButtons[i].currentMatchSolutionStatus == MatchStatus.Removed ? 1 : 0;
+            }
+            return removedNumber;
+        }
+        
+        public int GetFinalPlacedMatchNumber()
+        {
+            int placedNumber = 0;
+            for (int i = 0; i < _horizontalMatchButtons.Count; i++)
+            {
+                placedNumber += _horizontalMatchButtons[i].currentMatchSolutionStatus == MatchStatus.Placed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _backslashMatchButtons.Count; i++)
+            {
+                placedNumber += _backslashMatchButtons[i].currentMatchSolutionStatus == MatchStatus.Placed ? 1 : 0;
+            }
+            
+            for (int i = 0; i < _slashMatchButtons.Count; i++)
+            {
+                placedNumber += _slashMatchButtons[i].currentMatchSolutionStatus == MatchStatus.Placed ? 1 : 0;
+            }
+            return placedNumber;
+        }
     }
 }

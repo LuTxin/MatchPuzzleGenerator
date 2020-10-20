@@ -11,5 +11,9 @@ namespace DefaultNamespace
         List<MatchButtonData> GetMatchButtonList();
         bool IsAnswerMode();
         void SetInvisibleMatchColor(Color color);
+        int GetInitialRemovedMatchNumber();
+        int GetInitialPlacedMatchNumber();
+        int GetFinalRemovedMatchNumber();
+        int GetFinalPlacedMatchNumber();
     }
 }
