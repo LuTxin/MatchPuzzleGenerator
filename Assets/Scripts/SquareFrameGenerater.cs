@@ -167,7 +167,6 @@ namespace DefaultNamespace
                 _verticalMatchButtons[i].Clear();
             }
             _verticalMatchButtons.Clear();
-            _panel.GetComponent<Image>().color = Color.white;
         }
         
         public void ToggleSetAnswerMode()
@@ -175,12 +174,10 @@ namespace DefaultNamespace
             if (_isAnswerMode)
             {
                 _isAnswerMode = false;
-                _panel.GetComponent<Image>().color = Color.white;
             }
             else
             {
                 _isAnswerMode = true;
-                _panel.GetComponent<Image>().color = Color.gray;
             }
             
             for (int i = 0; i < _horizontalMatchButtons.Count; i++)
