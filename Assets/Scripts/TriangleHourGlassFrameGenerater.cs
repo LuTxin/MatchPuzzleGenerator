@@ -191,6 +191,16 @@ namespace DefaultNamespace
 
         public void ToggleSetAnswerMode()
         {
+            if (_isAnswerMode)
+            {
+                _isAnswerMode = false;
+            }
+            else
+            {
+                _isAnswerMode = true;
+            }
+
+            
             for (int i = 0; i < _horizontalMatchButtons.Count; i++)
             {
                 _horizontalMatchButtons[i].SetInteractiveMethod(_isAnswerMode);
