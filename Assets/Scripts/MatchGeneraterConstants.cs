@@ -22,7 +22,7 @@ namespace DefaultNamespace
         public const int MinColumnNumber = 1;
         
         public const int MaxMatchNumNumber = 9;
-        public const int MinMatchNumNumber = 1;
+        public const int MinMatchNumNumber = 0;
         
         public const int MaxHandCapabilityNumber = 9;
 
