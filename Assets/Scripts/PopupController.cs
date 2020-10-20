@@ -29,7 +29,7 @@ namespace DefaultNamespace
             _cancelButton.onClick.AddListener(OnCancelButtonClicked);
         }
 
-        public void ShowPopup(bool show, InputFieldType type, string text, EventHandler onOkayClicked)
+        public void ShowPopup(bool show, InputFieldType type, string text, EventHandler onOkayClicked = null,  EventHandler onCancelClicked = null)
         {
             _informationLabel.text = text;
 
@@ -37,33 +37,39 @@ namespace DefaultNamespace
             _inputField1.gameObject.SetActive(type == InputFieldType.Duo);
             _inputField2.gameObject.SetActive(type == InputFieldType.Duo);
 
-            OnOkayButtonPressedEventHandler += onOkayClicked;
+            if (onOkayClicked != null)
+            {
+                OnOkayButtonPressedEventHandler += onOkayClicked;
+            }
+
+            if (onCancelClicked != null)
+            {
+                OnCancelButtonPressedEventHandler += onCancelClicked;
+            }
             
             gameObject.SetActive(show);
         }
 
         public void OnOkayButtonClicked()
         {
-            gameObject.SetActive(false);
-            
             if (OnOkayButtonPressedEventHandler != null)
             {
                 OnOkayButtonPressedEventHandler.Invoke(this, new EventArgs());
-
-                CleanDelegate();
             }
+            
+            gameObject.SetActive(false);
+            CleanDelegate();
         }
         
         public void OnCancelButtonClicked()
         {
-            gameObject.SetActive(false);
-            
             if (OnCancelButtonPressedEventHandler != null)
             {
                 OnCancelButtonPressedEventHandler.Invoke(this, new EventArgs());
-
-                CleanDelegate();
             }
+            
+            gameObject.SetActive(false);
+            CleanDelegate();
         }
 
         public string GetInputFieldText()

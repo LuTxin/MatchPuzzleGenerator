@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
-using Object = UnityEngine.Object;
 
 public class Main : MonoBehaviour
 {
