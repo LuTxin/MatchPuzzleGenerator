@@ -313,6 +313,9 @@ public class Main : MonoBehaviour
             _statusLabel.text = "Json generated";
 
             streamWriter.Close();
+            
+            path = "./QuizData/" + fileName + ".png";
+            ScreenCapture.CaptureScreenshot(path);
 
             try
             {
