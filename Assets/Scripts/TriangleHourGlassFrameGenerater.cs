@@ -71,7 +71,7 @@ namespace DefaultNamespace
                 else
                 {
                     currentColumn = column/2;
-                    xOffset = matchHeight / 2f + matchWidth/2f;
+                    xOffset = matchHeight / 2f + matchWidth;
                 }
                 
                 for (int j = 0; j < currentColumn; j++)
