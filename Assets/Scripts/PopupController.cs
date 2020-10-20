@@ -52,23 +52,21 @@ namespace DefaultNamespace
 
         public void OnOkayButtonClicked()
         {
+            gameObject.SetActive(false);
             if (OnOkayButtonPressedEventHandler != null)
             {
                 OnOkayButtonPressedEventHandler.Invoke(this, new EventArgs());
             }
-            
-            gameObject.SetActive(false);
             CleanDelegate();
         }
         
         public void OnCancelButtonClicked()
         {
+            gameObject.SetActive(false);
             if (OnCancelButtonPressedEventHandler != null)
             {
                 OnCancelButtonPressedEventHandler.Invoke(this, new EventArgs());
             }
-            
-            gameObject.SetActive(false);
             CleanDelegate();
         }
 
