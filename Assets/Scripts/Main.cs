@@ -311,8 +311,15 @@ public class Main : MonoBehaviour
             JsonWriter jsonWriter = new JsonTextWriter(stringWriter);
             JsonSerializer jsonSerializer = JsonSerializer.Create();
             jsonSerializer.Serialize(jsonWriter, quizData);
-
-            string path = "./QuizData/" + fileName + ".json";
+            
+            string path = Application.persistentDataPath  + "/QuizData/" + fileName + ".json";
+            
+            FileInfo fi = new FileInfo(path);
+            if (!fi.Directory.Exists) 
+            { 
+                Directory.CreateDirectory(fi.DirectoryName); 
+            } 
+            
             StreamWriter streamWriter = new StreamWriter(path);
             streamWriter.Write(stringWriter.ToString());
             streamWriter.Flush();
@@ -321,7 +328,7 @@ public class Main : MonoBehaviour
 
             streamWriter.Close();
             
-            path = "./QuizData/" + fileName + ".png";
+            path = Application.persistentDataPath + "/QuizData/" + fileName + ".png";
             ScreenCapture.CaptureScreenshot(path);
 
             try
