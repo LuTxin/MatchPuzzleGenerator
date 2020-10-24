@@ -325,7 +325,8 @@ public class Main : MonoBehaviour
             streamWriter.Write(stringWriter.ToString());
             streamWriter.Flush();
 
-            _statusLabel.text = "Json generated";
+            string statusString = _frameGenerater.IsAnswerMode() ? "Initial State" : "Final State";
+            _statusLabel.text = fileName + " generated. Showing \"" + statusString + "\"";
 
             streamWriter.Close();
 
