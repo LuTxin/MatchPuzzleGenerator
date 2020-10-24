@@ -24,6 +24,7 @@ public class Main : MonoBehaviour
     [SerializeField] private Button _exportJsonButton;
     [SerializeField] private Text _statusLabel;
     [SerializeField] private Button _loadButton;
+    [SerializeField] private Camera _mainCamera;
     
     [SerializeField] private Button _restartButton;
     [SerializeField] private Button _hideInvisibleMatchButton;
@@ -327,10 +328,10 @@ public class Main : MonoBehaviour
             _statusLabel.text = "Json generated";
 
             streamWriter.Close();
-            
-            path = Application.persistentDataPath + "/QuizData/" + fileName + ".png";
-            ScreenCapture.CaptureScreenshot(path);
 
+            path = Application.persistentDataPath  + "/QuizData/" + fileName + ".png";
+            StartCoroutine(TakeSnapshot(path));
+            
             try
             {
 #if UNITY_STANDALONE_WIN
@@ -344,6 +345,21 @@ public class Main : MonoBehaviour
                 Debug.LogWarning("failed to open file location");
             }
         }
+    }
+
+    public IEnumerator TakeSnapshot(string path)
+    {
+        yield return new WaitForEndOfFrame();
+
+        Rect matchRect = _matchPanel.rect;
+        Vector3 screenMin = _mainCamera.WorldToScreenPoint(_matchPanel.TransformPoint(matchRect.min));
+        Vector3 screenMax = _mainCamera.WorldToScreenPoint(_matchPanel.TransformPoint(matchRect.max));
+        
+        Texture2D screenShot = new Texture2D((int)(screenMax.x - screenMin.x),(int)(screenMax.y - screenMin.y));
+        screenShot.ReadPixels(new Rect(screenMin.x, screenMin.y, (int)(screenMax.x - screenMin.x), (int)(screenMax.y - screenMin.y)), 0, 0);
+        screenShot.Apply();
+        byte[] bytes = screenShot.EncodeToPNG();
+        File.WriteAllBytes(path, bytes);
     }
 
     private void LoadJson(string fileName)

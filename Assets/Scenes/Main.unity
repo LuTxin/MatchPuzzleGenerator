@@ -1316,6 +1316,7 @@ MonoBehaviour:
   _exportJsonButton: {fileID: 964929809}
   _statusLabel: {fileID: 810764157}
   _loadButton: {fileID: 0}
+  _mainCamera: {fileID: 1752819410}
   _restartButton: {fileID: 1477661901}
   _hideInvisibleMatchButton: {fileID: 1911083932}
   _hideInvisibleMatchButtonText: {fileID: 514762011}
@@ -6201,6 +6202,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1751036872}
   m_CullTransparentMesh: 0
+--- !u!20 &1752819410 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 20807899929163332, guid: 18d0129461ffe9445bdb60bc2ced1ebb,
+    type: 3}
+  m_PrefabInstance: {fileID: 565532915}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1787757193
 GameObject:
   m_ObjectHideFlags: 0
